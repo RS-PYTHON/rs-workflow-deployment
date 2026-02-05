@@ -15,10 +15,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prefect-flow-deploy-config-stagingflow
+  name: prefect-flow-deploy-config-{{ app_name }}
 data:
   prefect.yaml: |
-    prefect-version: 3
+    prefect-version: "3"
 
     pull:
     - prefect.deployments.steps.git_clone:
@@ -26,9 +26,9 @@ data:
         branch: develop # should be 'develop' in git
 
     definitions:
-        work_pools:
-            my_work_pool: &my_work_pool
-                name: {{ prefect3worker.staging.name }}
+      work_pools:
+        my_work_pool: &my_work_pool
+            name: {{ prefect3worker.staging.name }}
 
     deployments:
     - name: Staging
