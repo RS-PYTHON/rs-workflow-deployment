@@ -35,8 +35,8 @@ spec:
             echo "Copying the prefect deployment file into /opt/prefect/rs-client-libraries/rs_workflows"
             cp /opt/prefect/prefect.yaml /opt/prefect/rs-client-libraries/prefect.yaml
 
-            echo "Installing rs-client-libraries"
-            uv pip install rs-client-libraries==1.0a6
+            echo "Installing rs-client-libraries and other dependencies"
+            uv pip install rs-client-libraries==1.0a6 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
 
             echo "📦 Prefect deployment initalisation";
             echo "prefect --no-prompt deploy --all";
