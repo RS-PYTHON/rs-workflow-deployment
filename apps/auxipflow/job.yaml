@@ -36,7 +36,7 @@ spec:
             cp /opt/prefect/prefect.yaml /opt/prefect/rs-client-libraries/prefect.yaml
 
             echo "Installing rs-client-libraries and other dependencies"
-            uv pip install rs-client-libraries==1.0a6 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
+            uv pip install rs-client-libraries==1.0a7 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
 
             echo "📦 Prefect deployment initalisation";
             echo "prefect --no-prompt deploy --all";
