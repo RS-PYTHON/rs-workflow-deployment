@@ -14,7 +14,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: prefect-deployment-job-ondemandprocessingdemo
+  name: prefect-deployment-job-ondemandprocessing
 spec:
   template:
     spec:
@@ -27,14 +27,13 @@ spec:
           - |
             set -e # exit in case of error
             echo "📦 Cloning the repository..."
-            git clone --branch develop https://github.com/RS-PYTHON/rs-client-libraries.git /tmp/rs-client-libraries
+            git clone --branch v1.0a7 https://github.com/RS-PYTHON/rs-client-libraries.git /tmp/rs-client-libraries
 
             echo "📂 Check the rs_workflow folder contents:"
             ls /tmp/rs-client-libraries/rs_workflows || echo "⚠️ Folder rs_workflows not found"
 
-            echo "🚀 Déploiement Prefect..."
+            echo "🚀 Prefect deployment..."
             cd /tmp/rs-client-libraries
-            #git log -1
             prefect --no-prompt  deploy --prefect-file /app/prefect.yaml --all;
         env:
         - name: PREFECT_API_URL
@@ -45,5 +44,5 @@ spec:
       volumes:
       - name: deployment-script
         configMap:
-          name: prefect-flow-deploy-config-ondemandprocessingdemo
+          name: prefect-flow-deploy-config-ondemandprocessing
       restartPolicy: Never
