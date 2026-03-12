@@ -1,3 +1,4 @@
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ spec:
           - |
             set -e
             echo "📦 Cloning the repository..."
-            git clone --branch develop https://github.com/RS-PYTHON/rs-client-libraries.git
+            git clone --branch v1.0a7 https://github.com/RS-PYTHON/rs-client-libraries.git
 
             echo "📂 Check the rs_workflow folder contents:"
             ls /opt/prefect/rs-client-libraries/rs_workflows || echo "⚠️ Folder rs_workflows not found"
@@ -38,11 +39,8 @@ spec:
             echo "Installing rs-client-libraries and other dependencies"
             uv pip install rs-client-libraries==1.0a7 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
 
-            echo "📦 Prefect deployment initalisation";
-            echo "prefect --no-prompt deploy --all";
+            echo "📦 Prefect deployment initialisation";
             prefect --no-prompt deploy --all;
-
-            #sleep 3600
         env:
         - name: PREFECT_API_URL
           value: "http://prefect-server.processing.svc.cluster.local:4200/api"
