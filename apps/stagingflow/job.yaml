@@ -14,36 +14,44 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: prefect-deployment-job-stagingflow
+  name: prefect-deployment-job-{{ app_name }}
 spec:
   template:
     spec:
       containers:
       - name: prefect-deployment-job
-        image: prefecthq/prefect:3.2.13-python3.11-kubernetes
+        image: prefecthq/prefect:3.6.12-python3.13-kubernetes
         command:
           - bash
           - -c
           - |
             set -e
             echo "📦 Cloning the repository..."
-            git clone --branch develop https://github.com/RS-PYTHON/rs-client-libraries.git /tmp/rs-client-libraries
+            git clone --branch develop https://github.com/RS-PYTHON/rs-client-libraries.git
 
             echo "📂 Check the rs_workflow folder contents:"
-            ls /tmp/rs-client-libraries/rs_workflows || echo "⚠️ Folder rs_workflows not found"
+            ls /opt/prefect/rs-client-libraries/rs_workflows || echo "⚠️ Folder rs_workflows not found"
+
+            echo "Copying the prefect deployment file into /opt/prefect/rs-client-libraries/rs_workflows"
+            cp /opt/prefect/prefect.yaml /opt/prefect/rs-client-libraries/prefect.yaml
+
+            echo "Installing rs-client-libraries and other dependencies"
+            uv pip install rs-client-libraries==1.0a7 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
 
             echo "📦 Prefect deployment initalisation";
-            cd /tmp/rs-client-libraries
-            prefect --no-prompt  deploy --prefect-file /app/prefect.yaml --all;
+            echo "prefect --no-prompt deploy --all";
+            prefect --no-prompt deploy --all;
 
+            #sleep 3600
         env:
         - name: PREFECT_API_URL
           value: "http://prefect-server.processing.svc.cluster.local:4200/api"
         volumeMounts:
         - name: deployment-script
-          mountPath: /app
+          mountPath: /opt/prefect/prefect.yaml
+          subPath: prefect.yaml
       volumes:
       - name: deployment-script
         configMap:
-          name: prefect-flow-deploy-config-stagingflow
+          name: prefect-flow-deploy-config-{{ app_name }}
       restartPolicy: Never
