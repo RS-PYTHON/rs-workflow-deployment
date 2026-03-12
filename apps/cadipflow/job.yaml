@@ -28,22 +28,19 @@ spec:
           - |
             set -e
             echo "📦 Cloning the repository..."
-            git clone --branch v1.0a7 https://github.com/RS-PYTHON/rs-client-libraries.git
+            git clone --single-branch --branch ${RS_CLIENT_LIBRARIES_REF} https://github.com/RS-PYTHON/rs-client-libraries.git
+            cd /opt/prefect/rs-client-libraries
+            echo "📦 Installing dependencies..."
+            ./install.sh
 
-            echo "📂 Check the rs_workflow folder contents:"
-            ls /opt/prefect/rs-client-libraries/rs_workflows || echo "⚠️ Folder rs_workflows not found"
-
-            echo "Copying the prefect deployment file into /opt/prefect/rs-client-libraries/rs_workflows"
-            cp /opt/prefect/prefect.yaml /opt/prefect/rs-client-libraries/prefect.yaml
-
-            echo "Installing rs-client-libraries and other dependencies"
-            uv pip install rs-client-libraries==1.0a7 pystac opentelemetry.instrumentation.asyncio opentelemetry.instrumentation.requests
-
-            echo "📦 Prefect deployment initialisation";
-            prefect --no-prompt deploy --all;
+            echo "📦 Prefect deployment..."
+            cp /opt/prefect/prefect.yaml .
+            prefect --no-prompt deploy --all
         env:
+        - name: RS_CLIENT_LIBRARIES_REF
+          value: develop  # v1.0a7
         - name: PREFECT_API_URL
-          value: "http://prefect-server.processing.svc.cluster.local:4200/api"
+          value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:
         - name: deployment-script
           mountPath: /opt/prefect/prefect.yaml

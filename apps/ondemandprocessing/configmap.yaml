@@ -23,7 +23,7 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: v1.0a7
+        branch: develop  # v1.0a7
 
     definitions:
       work_pools:
@@ -33,5 +33,5 @@ data:
     deployments:
     - name: On-demand processing
       tags: ["on-demand", "dpr"]
-      entrypoint: ./rs_workflows/on_demand_processing.py:on_demand_processing
+      entrypoint: ./rs_workflows/on_demand_processing.py:dpr_processing
       work_pool: *my_work_pool
