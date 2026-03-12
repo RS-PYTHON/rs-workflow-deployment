@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,24 +23,14 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: develop # should be 'develop' in git
+        branch: v1.0a7
 
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-          name: {{ prefect3worker.staging.name }}
+          name: {{ prefect3worker.eopf.name }}
 
     deployments:
-    - name: On-demand Cadip staging
-      tags: ["on-demand", "staging"]
-      entrypoint: ./rs_workflows/on_demand_processing.py:on_demand_cadip_staging
-      work_pool: *my_work_pool
-
-    - name: On-demand Auxip staging
-      tags: ["on-demand", "staging"]
-      entrypoint: ./rs_workflows/on_demand_processing.py:on_demand_auxip_staging
-      work_pool: *my_work_pool
-
     - name: On-demand processing
       tags: ["on-demand", "dpr"]
       entrypoint: ./rs_workflows/on_demand_processing.py:on_demand_processing

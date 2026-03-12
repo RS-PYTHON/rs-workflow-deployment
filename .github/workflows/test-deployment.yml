@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: RS-PYTHON/rs-infra-core
           submodules: recursive
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: rs-workflow-deployment
       - name: Install requirements
@@ -51,7 +51,7 @@ jobs:
           ~/miniforge3/bin/conda init bash
 
           # Create conda env with python
-          conda create -y -n rspy python=3.11
+          conda create -y -n rspy python=3.13
 
           # Install Ansible, Terraform, Openstackclient
           conda run -n rspy conda install -y -c conda-forge ansible terraform python-openstackclient passlib boto3 kubernetes-helm kubernetes-client
