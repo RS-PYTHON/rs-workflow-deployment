@@ -29,6 +29,10 @@ on:
         description: rs-infra-core branch or tag
         required: true
         default: 'develop'
+      client_libraries_ref:
+        description: rs-client-libraries branch or tag
+        required: true
+        default: 'develop'
 
 jobs:
   test-deploy:
@@ -43,23 +47,30 @@ jobs:
           - name: "Deployment without monitoring"
             deploy_monitoring: false
     steps:
-      - name: Check if branch exists in rs-infra-core
-        id: check_branch
+      - name: Check if branches exist in rs-infra-core and rs-client-libraries
+        id: check_branches
         env:
           LOCAL_BRANCH: ${{ github.head_ref }}
           INFRA_CORE_REF: ${{ inputs.infra_core_ref || '' }}
+          CLIENT_LIBRARIES_REF: ${{ inputs.client_libraries_ref || '' }}
         run: |
           BRANCH="${INFRA_CORE_REF:-$LOCAL_BRANCH}"
           if git ls-remote --heads https://github.com/RS-PYTHON/rs-infra-core.git $BRANCH | grep -q $BRANCH; then
-            echo "branch_to_use=$BRANCH" >> $GITHUB_OUTPUT
+            echo "infra_branch_to_use=$BRANCH" >> $GITHUB_OUTPUT
           else
-            echo "branch_to_use=" >> $GITHUB_OUTPUT  # Leave empty to use default
+            echo "infra_branch_to_use=" >> $GITHUB_OUTPUT  # Leave empty to use default
+          fi
+          BRANCH="${CLIENT_LIBRARIES_REF:-$LOCAL_BRANCH}"
+          if git ls-remote --heads https://github.com/RS-PYTHON/rs-client-libraries.git $BRANCH | grep -q $BRANCH; then
+            echo "client_branch_to_use=$BRANCH" >> $GITHUB_OUTPUT
+          else
+            echo "client_branch_to_use=" >> $GITHUB_OUTPUT  # Leave empty to use default
           fi
       - name: Checkout infra-core repository
         uses: actions/checkout@v6
         with:
           repository: RS-PYTHON/rs-infra-core
-          ref: ${{ steps.check_branch.outputs.branch_to_use }}
+          ref: ${{ steps.check_branches.outputs.infra_branch_to_use }}
       - name: Checkout infra-monitoring repository
         uses: actions/checkout@v6
         if: ${{ matrix.deploy_monitoring }}
@@ -76,6 +87,25 @@ jobs:
         with:
           path: rs-workflow-deployment
           ref: ${{ github.ref }}
+      - name: Set workflows version
+        run: |
+          BRANCH="${{ steps.check_branches.outputs.client_branch_to_use }}"
+
+          if [ -z "$BRANCH" ]; then
+            echo "No branch override provided, skipping update."
+            exit 0
+          fi
+
+          echo "Using rs-client-libraries branch: $BRANCH"
+
+          find rs-workflow-deployment/apps -type f -name "configmap.yaml" | while read file; do
+            echo "Updating $file"
+            sed -i -E "s|^[[:space:]]*branch:[[:space:]]*.*$|        branch: $BRANCH|" "$file"
+          done
+          find rs-workflow-deployment/apps -type f -name "job.yaml" | while read file; do
+            echo "Updating $file"
+            sed -i -E "s|^[[:space:]]*value:[[:space:]]*develop.*$|          value: $BRANCH|" "$file"
+          done
       - name: Aggressive cleanup
         run: |
           # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
