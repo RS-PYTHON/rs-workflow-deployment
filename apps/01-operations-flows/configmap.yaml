@@ -23,15 +23,27 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: develop  # v1.0a7
+        branch: develop  # v1.0a8
 
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-            name: {{ prefect3worker.staging.name }}
+          name: {{ prefect3worker.general.name }}
 
     deployments:
-    - name: Staging
-      tags: ["on-demand", "staging"]
-      entrypoint: ./rs_workflows/staging_flow.py:staging
+    - name: OSAM synchronize accounts
+      tags: ["operation", "osam"]
+      entrypoint: ./rs_workflows/operation/osam_flows.py:osam_synchronize_accounts
+      work_pool: *my_work_pool
+    - name: OSAM update account
+      tags: ["operation", "osam"]
+      entrypoint: ./rs_workflows/operation/osam_flows.py:osam_update_user
+      work_pool: *my_work_pool
+    - name: Collect Object Storage Logs
+      tags: ["operation", "quota", "monitoring"]
+      entrypoint: ./rs_workflows/operation/quota_monitoring_flow.py:collect_obs_logs
+      work_pool: *my_work_pool
+    - name: Consolidate Object Storage Logs
+      tags: ["operation", "quota", "monitoring"]
+      entrypoint: ./rs_workflows/operation/quota_monitoring_flow.py:consolidate_obs_logs
       work_pool: *my_work_pool

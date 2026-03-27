@@ -12,26 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prefect-flow-deploy-config-{{ app_name }}
-data:
-  prefect.yaml: |
-    prefect-version: "3"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
 
-    pull:
-    - prefect.deployments.steps.git_clone:
-        repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: develop  # v1.0a7
+namespace: processing
 
-    definitions:
-      work_pools:
-        my_work_pool: &my_work_pool
-          name: {{ prefect3worker.general.name }}
-
-    deployments:
-    - name: Auxip search
-      tags: ["on-demand", "auxip"]
-      entrypoint: ./rs_workflows/auxip_flow.py:search
-      work_pool: *my_work_pool
+resources:
+  - configmap.yaml
+  - job.yaml
