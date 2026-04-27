@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
-## [1.0a8] - 2026-03-30
+## [1.0a9] - 2026-04-27
 
 ### Changed
 
