@@ -17,4 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
+- Updated tag from v1.0a8.post2 to v1.0a9
+
+## [1.0a8] - 2026-03-30
+
+### Changed
+
 - Updated tag from develop to v1.0a8.post2
