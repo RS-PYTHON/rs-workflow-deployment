@@ -35,7 +35,7 @@ spec:
 
             echo "📦 Prefect deployment..."
             cp /opt/prefect/prefect.yaml .
-            prefect --no-prompt deploy --all
+            uv run prefect --no-prompt deploy --all --prefect-file ./prefect.yaml
         env:
         - name: RS_CLIENT_LIBRARIES_REF
           value: v1.0a9 # v1.0a9
