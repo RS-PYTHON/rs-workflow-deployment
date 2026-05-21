@@ -161,7 +161,7 @@ jobs:
         run: |
           ./rs-workflow-env/.github/common/resources/configure-minikube-deployment.sh
           # we only need Prefect
-          for app in prefect3-db prefect3-server prefect3-worker-general prefect3-worker-eopf prefect3-worker-staging ; do
+          for app in prefect3-db prefect3-server prefect3-worker-sandbox prefect3-worker-integrated prefect3-worker-monitoring ; do
             echo Installing $app...
             conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml  -e '{"package_paths": ["./rs-workflow-env/apps/"], "app": "'$app'"}'
           done

@@ -28,22 +28,22 @@ data:
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-          name: {{ prefect3worker.general.name }}
+          name: {{ prefect3worker.integrated.name }}
 
     deployments:
-    - name: Auxip search
-      tags: ["on-demand", "search", "auxip"]
+    - name: Search Auxip
+      tags: ["searching", "auxip"]
       entrypoint: ./rs_workflows/auxip_flow.py:search
       work_pool: *my_work_pool
-    - name: Cadip search
-      tags: ["on-demand", "search", "cadip"]
+    - name: Search Cadip
+      tags: ["searching", "cadip"]
       entrypoint: ./rs_workflows/cadip_flow.py:search
       work_pool: *my_work_pool
-    - name: Catalog search
-      tags: ["on-demand", "search", "catalog"]
+    - name: Search Catalog
+      tags: ["searching", "catalog"]
       entrypoint: ./rs_workflows/catalog_flow.py:catalog_search
       work_pool: *my_work_pool
-    - name: Prip search
-      tags: ["on-demand", "search", "prip"]
+    - name: Search Prip
+      tags: ["searching", "prip"]
       entrypoint: ./rs_workflows/prip_flow.py:search
       work_pool: *my_work_pool

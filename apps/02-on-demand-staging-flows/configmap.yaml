@@ -28,18 +28,18 @@ data:
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-          name: {{ prefect3worker.staging.name }}
+          name: {{ prefect3worker.integrated.name }}
 
     deployments:
-    - name: On-demand Auxip staging
-      tags: ["on-demand", "auxip", "staging"]
+    - name: Stage Aux
+      tags: ["aux", "staging"]
       entrypoint: ./rs_workflows/auxip_flow.py:on_demand_auxip_staging
       work_pool: *my_work_pool
-    - name: On-demand Cadip staging
-      tags: ["on-demand", "cadip", "staging"]
+    - name: Stage Cadip
+      tags: ["cadip", "staging"]
       entrypoint: ./rs_workflows/cadip_flow.py:on_demand_cadip_staging
       work_pool: *my_work_pool
-    - name: On-demand Prip staging
-      tags: ["on-demand", "prip", "staging"]
+    - name: Stage Prip
+      tags: ["prip", "staging"]
       entrypoint: ./rs_workflows/prip_flow.py:on_demand_prip_staging
       work_pool: *my_work_pool
