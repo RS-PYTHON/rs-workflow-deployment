@@ -171,7 +171,7 @@ jobs:
       - name: Deploy the workflow-deployment apps (for real)
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
-          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-workflow-deployment/apps/"]}'
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-workflow-deployment/apps/"]}' -e job_wait_timeout=360
       - name: 🩺 Kubernetes failure diagnostics
         if: failure()
         run: .github/common/resources/minikube-diagnostics.sh
