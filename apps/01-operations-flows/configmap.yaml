@@ -28,22 +28,22 @@ data:
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-          name: {{ prefect3worker.general.name }}
+          name: {{ prefect3worker.monitoring.name }}
 
     deployments:
-    - name: OSAM synchronize accounts
+    - name: Synchronize OSAM Accounts
       tags: ["operation", "osam"]
       entrypoint: ./rs_workflows/operation/osam_flows.py:osam_synchronize_accounts
       work_pool: *my_work_pool
-    - name: OSAM update account
+    - name: Update OSAM Account
       tags: ["operation", "osam"]
       entrypoint: ./rs_workflows/operation/osam_flows.py:osam_update_user
       work_pool: *my_work_pool
-    - name: Collect Object Storage Logs
-      tags: ["operation", "quota", "monitoring"]
+    - name: Collect OBS Logs
+      tags: ["operation", "obs"]
       entrypoint: ./rs_workflows/operation/quota_monitoring_flow.py:collect_obs_logs
       work_pool: *my_work_pool
-    - name: Consolidate Object Storage Logs
-      tags: ["operation", "quota", "monitoring"]
+    - name: Consolidate OBS Logs
+      tags: ["operation", "obs"]
       entrypoint: ./rs_workflows/operation/quota_monitoring_flow.py:consolidate_obs_logs
       work_pool: *my_work_pool

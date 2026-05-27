@@ -28,10 +28,10 @@ data:
     definitions:
       work_pools:
         my_work_pool: &my_work_pool
-            name: {{ prefect3worker.staging.name }}
+            name: {{ prefect3worker.integrated.name }}
 
     deployments:
-    - name: Staging
-      tags: ["on-demand", "staging"]
+    - name: Stage Generic
+      tags: ["all", "staging"]
       entrypoint: ./rs_workflows/staging_flow.py:staging
       work_pool: *my_work_pool
