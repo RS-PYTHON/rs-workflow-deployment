@@ -31,7 +31,10 @@ on:
         description: rs-client-libraries branch or tag
         required: true
         default: 'develop'
-
+      workflow_env_ref:
+        description: rs-workflow-env branch or tag
+        required: true
+        default: 'develop'
 jobs:
   test-deploy:
     if: github.actor != 'dependabot[bot]' # ignore pull requests by github bot
@@ -51,6 +54,7 @@ jobs:
           LOCAL_BRANCH: ${{ github.head_ref }}
           INFRA_CORE_REF: ${{ inputs.infra_core_ref || '' }}
           CLIENT_LIBRARIES_REF: ${{ inputs.client_libraries_ref || '' }}
+          WORKFLOW_ENV_REF: ${{ inputs.workflow_env_ref || '' }}
         run: |
           BRANCH="${INFRA_CORE_REF:-$LOCAL_BRANCH}"
           if git ls-remote --heads https://github.com/RS-PYTHON/rs-infra-core.git $BRANCH | grep -q $BRANCH; then
@@ -63,6 +67,12 @@ jobs:
             echo "client_branch_to_use=$BRANCH" >> $GITHUB_OUTPUT
           else
             echo "client_branch_to_use=" >> $GITHUB_OUTPUT  # Leave empty to use default
+          fi
+          BRANCH="${WORKFLOW_ENV_REF:-$LOCAL_BRANCH}"
+          if git ls-remote --heads https://github.com/RS-PYTHON/rs-workflow-env.git $BRANCH | grep -q $BRANCH; then
+            echo "workflow_env_branch_to_use=$BRANCH" >> $GITHUB_OUTPUT
+          else
+            echo "workflow_env_branch_to_use=" >> $GITHUB_OUTPUT  # Leave empty to use default
           fi
       - name: Checkout infra-core repository
         uses: actions/checkout@v6
@@ -78,8 +88,8 @@ jobs:
       - name: Checkout workflow-env repository
         uses: actions/checkout@v6
         with:
-          path: rs-workflow-env
           repository: RS-PYTHON/rs-workflow-env
+          ref: ${{ steps.check_branches.outputs.workflow_env_branch_to_use }}
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
