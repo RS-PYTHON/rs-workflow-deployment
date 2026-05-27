@@ -89,6 +89,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: RS-PYTHON/rs-workflow-env
+          path: rs-workflow-env
           ref: ${{ steps.check_branches.outputs.workflow_env_branch_to_use }}
       - name: Checkout repository
         uses: actions/checkout@v6
