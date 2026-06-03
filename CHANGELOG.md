@@ -13,6 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a10] - 2026-06-03
+
+### Changed
+
+- [PR#9](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/9) : Update to force deployment prefect deployment in version previously cloned
+- [RSPY-1071](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/11) : Update to Prefect 3.6.29
+- [PR#10](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/10) : Update workpool, deployment and tags
+- Updated tag from v1.0a9 to v1.0a10
+
 ## [1.0a9] - 2026-04-27
 
 ### Changed
