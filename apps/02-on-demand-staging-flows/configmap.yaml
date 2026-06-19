@@ -23,7 +23,7 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: v1.0a10 # v1.0a10
+        branch: v1.0a11 # v1.0a11
 
     definitions:
       work_pools:
@@ -33,7 +33,7 @@ data:
     deployments:
     - name: Stage Aux
       tags: ["aux", "staging"]
-      entrypoint: ./rs_workflows/auxip_flow.py:on_demand_auxip_staging
+      entrypoint: ./rs_workflows/aux_flow.py:on_demand_aux_staging
       work_pool: *my_work_pool
     - name: Stage Cadip
       tags: ["cadip", "staging"]
