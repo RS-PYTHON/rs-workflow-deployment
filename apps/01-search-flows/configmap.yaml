@@ -33,7 +33,7 @@ data:
     deployments:
     - name: Search Auxip
       tags: ["searching", "auxip"]
-      entrypoint: ./rs_workflows/auxip_flow.py:search
+      entrypoint: ./rs_workflows/aux_flow.py:search
       work_pool: *my_work_pool
     - name: Search Cadip
       tags: ["searching", "cadip"]
