@@ -13,6 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a10] - 2026-06-19
+
+### Changed
+
+- [PR#13](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/13) : update CI to delete specific app
+
 ## [1.0a10] - 2026-06-03
 
 ### Changed
