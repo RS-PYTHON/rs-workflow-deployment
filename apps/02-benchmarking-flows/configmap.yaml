@@ -31,19 +31,7 @@ data:
           name: {{ prefect3worker.integrated.name }}
 
     deployments:
-    - name: Search Auxip
-      tags: ["searching", "auxip"]
-      entrypoint: ./rs_workflows/aux_flow.py:search
-      work_pool: *my_work_pool
-    - name: Search Cadip
-      tags: ["searching", "cadip"]
-      entrypoint: ./rs_workflows/cadip_flow.py:search
-      work_pool: *my_work_pool
-    - name: Search Catalog
-      tags: ["searching", "catalog"]
-      entrypoint: ./rs_workflows/catalog_flow.py:catalog_search
-      work_pool: *my_work_pool
-    - name: Search Prip
-      tags: ["searching", "prip"]
-      entrypoint: ./rs_workflows/prip_flow.py:search
+    - name: Benchmark Processor
+      tags: ["processing", "all", "benchmarking"]
+      entrypoint: ./rs_workflows/benchmarking/benchmarking_flow.py:benchmark_processor
       work_pool: *my_work_pool

@@ -38,7 +38,7 @@ spec:
             uv run prefect --no-prompt deploy --all --prefect-file ./prefect.yaml
         env:
         - name: RS_CLIENT_LIBRARIES_REF
-          value: v1.0a11 # v1.0a11
+          value: develop
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:
