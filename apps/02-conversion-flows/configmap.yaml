@@ -1,0 +1,52 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prefect-flow-deploy-config-{{ app_name }}
+data:
+  prefect.yaml: |
+    prefect-version: "3"
+
+    pull:
+    - prefect.deployments.steps.git_clone:
+        repository: https://github.com/RS-PYTHON/rs-client-libraries.git
+        branch: develop
+
+    definitions:
+      work_pools:
+        my_work_pool: &my_work_pool
+          name: {{ prefect3worker.integrated.name }}
+
+    deployments:
+    - name: Convert ADF
+      tags: ["conversion", "auxip", "on-demand"]
+      entrypoint: ./rs_workflows/adf_flow.py:adf_conversion
+      work_pool: *my_work_pool
+
+    - name: Convert ADF Group
+      tags: ["conversion", "auxip", "on-demand"]
+      entrypoint: ./rs_workflows/on_demand/adf/convert_adf_set.py:convert_adf_group
+      work_pool: *my_work_pool
+
+    - name: Convert ADF Scheduled
+      tags: ["conversion", "auxip"]
+      entrypoint: ./rs_workflows/on_demand/adf/convert_adf_set.py:adf_conversion_scheduled
+      work_pool: *my_work_pool
+
+    - name: Convert SAFE
+      tags: ["conversion", "staging", "on-demand"]
+      entrypoint: ./rs_workflows/on_demand_conversion.py:on_demand_conversion
+      work_pool: *my_work_pool
