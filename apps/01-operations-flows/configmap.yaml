@@ -47,3 +47,15 @@ data:
       tags: ["operation", "obs"]
       entrypoint: ./rs_workflows/operation/quota_monitoring_flow.py:consolidate_obs_logs
       work_pool: *my_work_pool
+    - name: Clean old prefect workers
+      tags: ["operation", "prefect"]
+      entrypoint: ./rs_workflows/operation/clean_old_prefect_workers_flow.py:cleanup_offline_workers
+      work_pool: *my_work_pool
+      parameters:
+        work_pools_csv: "monitoring-k8s-pool,processing-integrated-k8s-pool,processing-sandbox-k8s-pool"
+        max_age_days: 1
+      schedules:
+        - cron: "0 10 * * *"
+          timezone: "Europe/Paris"
+          active: true
+      
