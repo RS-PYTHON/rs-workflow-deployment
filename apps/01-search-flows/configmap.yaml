@@ -23,7 +23,7 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        branch: develop
+        branch: v1.0a12
 
     definitions:
       work_pools:

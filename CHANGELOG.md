@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a12] - 2026-07-21
+
+### Added
+
+- [RSPY-1099](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/16) : First benchmarking flow
+- [PR#17](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/17) :  Deploy conversion flows
+- [RSPY-289](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/19) : add the new flow in operation-flows
+
+### Changed
+
+- [PR#15](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/15) : Update prefect version to 3.7.5
+
 ## [1.0a11] - 2026-06-19
 
 ### Changed
