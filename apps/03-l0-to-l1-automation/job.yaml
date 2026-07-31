@@ -36,7 +36,7 @@ spec:
             echo "📦 Creating Prefect automation..."
             cp /opt/prefect/automation.json .
             S3_L1_DEPLOYMENT_ID="$(
-              uv run prefect deployment inspect "process-s3-l1-olci/on_demand_S3L1OLCI" \
+              prefect deployment inspect "process-s3-l1-olci/on_demand_S3L1OLCI" --output json \
                 | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
             )"
             sed -i "s/__S3_L1_DEPLOYMENT_ID__/${S3_L1_DEPLOYMENT_ID}/g" automation.json

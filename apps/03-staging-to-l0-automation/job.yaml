@@ -36,11 +36,11 @@ spec:
             echo "📦 Creating Prefect automation..."
             cp /opt/prefect/automation.json .
             STAGING_DEPLOYMENT_ID="$(
-              uv run prefect deployment inspect "stage-cadip-with-options/Stage Cadip" \
+              prefect deployment inspect "stage-cadip-with-options/Stage Cadip" --output json \
                 | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
             )"
             S3_L0_DEPLOYMENT_ID="$(
-              uv run prefect deployment inspect "process-s3-l0/Process S3 L0" \
+              prefect deployment inspect "process-s3-l0/Process S3 L0" --output json \
                 | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
             )"
             sed -i "s/__STAGING_DEPLOYMENT_ID__/${STAGING_DEPLOYMENT_ID}/g" automation.json

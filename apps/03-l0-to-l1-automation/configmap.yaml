@@ -64,6 +64,5 @@ data:
       ],
       "actions_on_trigger": [],
       "actions_on_resolve": [],
-      "owner_resource": null,
-      "id": "c9afcffe-2727-4cb2-9438-407192c3d299"
+      "owner_resource": null
     }
