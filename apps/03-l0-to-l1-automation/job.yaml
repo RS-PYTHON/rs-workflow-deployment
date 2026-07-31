@@ -26,24 +26,17 @@ spec:
           - bash
           - -c
           - |
-            set -e
-            echo "📦 Cloning the repository..."
-            git clone --single-branch --branch ${RS_CLIENT_LIBRARIES_REF} https://github.com/RS-PYTHON/rs-client-libraries.git
-            cd /opt/prefect/rs-client-libraries
-            echo "📦 Installing dependencies..."
-            ./install.sh
-
-            echo "📦 Creating Prefect automation..."
+            set -euo pipefail
+            echo "Resolving Prefect deployment IDs..."
             cp /opt/prefect/automation.json .
             S3_L1_DEPLOYMENT_ID="$(
               prefect deployment inspect "process-s3-l1-olci/on_demand_S3L1OLCI" --output json \
                 | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
             )"
             sed -i "s/__S3_L1_DEPLOYMENT_ID__/${S3_L1_DEPLOYMENT_ID}/g" automation.json
-            uv run prefect --no-prompt automation create --from-file ./automation.json
+            echo "Creating Prefect automation..."
+            prefect --no-prompt automation create --from-file ./automation.json
         env:
-        - name: RS_CLIENT_LIBRARIES_REF
-          value: develop
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:

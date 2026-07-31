@@ -26,14 +26,8 @@ spec:
           - bash
           - -c
           - |
-            set -e
-            echo "📦 Cloning the repository..."
-            git clone --single-branch --branch ${RS_CLIENT_LIBRARIES_REF} https://github.com/RS-PYTHON/rs-client-libraries.git
-            cd /opt/prefect/rs-client-libraries
-            echo "📦 Installing dependencies..."
-            ./install.sh
-
-            echo "📦 Creating Prefect automation..."
+            set -euo pipefail
+            echo "Resolving Prefect deployment IDs..."
             cp /opt/prefect/automation.json .
             STAGING_DEPLOYMENT_ID="$(
               prefect deployment inspect "stage-cadip-with-options/Stage Cadip" --output json \
@@ -45,10 +39,9 @@ spec:
             )"
             sed -i "s/__STAGING_DEPLOYMENT_ID__/${STAGING_DEPLOYMENT_ID}/g" automation.json
             sed -i "s/__S3_L0_DEPLOYMENT_ID__/${S3_L0_DEPLOYMENT_ID}/g" automation.json
-            uv run prefect --no-prompt automation create --from-file ./automation.json
+            echo "Creating Prefect automation..."
+            prefect --no-prompt automation create --from-file ./automation.json
         env:
-        - name: RS_CLIENT_LIBRARIES_REF
-          value: develop
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:
