@@ -31,6 +31,10 @@ data:
           name: {{ prefect3worker.integrated.name }}
 
     deployments:
+    - name: Stage Aux CQL2
+      tags: ["aux", "staging"]
+      entrypoint: ./rs_workflows/aux_flow.py:aux_staging
+      work_pool: *my_work_pool
     - name: Stage Aux
       tags: ["aux", "staging"]
       entrypoint: ./rs_workflows/aux_flow.py:on_demand_aux_staging
