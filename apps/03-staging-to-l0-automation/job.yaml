@@ -23,24 +23,22 @@ spec:
       - name: prefect-automation-job
         image: prefecthq/prefect:3.7.5-python3.13-kubernetes
         command:
-          - bash
-          - -c
-          - |
-            set -euo pipefail
-            echo "Resolving Prefect deployment IDs..."
-            cp /opt/prefect/automation.json .
-            STAGING_DEPLOYMENT_ID="$(
-              prefect deployment inspect "stage-cadip-with-options/Stage Cadip" --output json \
-                | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
-            )"
-            S3_L0_DEPLOYMENT_ID="$(
-              prefect deployment inspect "process-s3-l0/Process S3 L0" --output json \
-                | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
-            )"
-            sed -i "s/__STAGING_DEPLOYMENT_ID__/${STAGING_DEPLOYMENT_ID}/g" automation.json
-            sed -i "s/__S3_L0_DEPLOYMENT_ID__/${S3_L0_DEPLOYMENT_ID}/g" automation.json
-            echo "Creating Prefect automation..."
-            prefect --no-prompt automation create --from-file ./automation.json
+        - bash
+        - -c
+        - |
+          set -euo pipefail
+          echo "Resolving Prefect deployment IDs..."
+          cp /opt/prefect/automation.json .
+          STAGING_DEPLOYMENT_ID="$(
+            prefect deployment inspect "stage-cadip-with-options/Stage Cadip" --output json \
+              | python -c 'import json, sys; print(json.load(sys.stdin)["id"])'
+          )"
+          S3_L0_DEPLOYMENT_ID="$(
+            prefect deployment inspect "process-s3-l0/Process S3 L0" | grep "'id':" | head -1 | sed -E "s/.*'id': '([^']+)'.*/\1/")"
+          sed -i "s/__STAGING_DEPLOYMENT_ID__/${STAGING_DEPLOYMENT_ID}/g" automation.json
+          sed -i "s/__S3_L0_DEPLOYMENT_ID__/${S3_L0_DEPLOYMENT_ID}/g" automation.json
+          echo "Creating Prefect automation..."
+          prefect --no-prompt automation create --from-file ./automation.json
         env:
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
