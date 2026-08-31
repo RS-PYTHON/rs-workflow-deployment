@@ -1,0 +1,68 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prefect-automation-config-{{ app_name }}
+data:
+  automation.json: |
+    {
+      "name": "S3 L0 products ready -> S3 L1 OLCI",
+      "description": "",
+      "enabled": true,
+      "tags": [],
+      "trigger": {
+        "type": "event",
+        "match": {
+          "prefect.resource.id": [
+            "rs-python.s3-l0-result.*"
+          ]
+        },
+        "match_related": {},
+        "after": [],
+        "expect": [
+          "rs-python.s3-l0.products-ready"
+        ],
+        "for_each": [],
+        "posture": "Reactive",
+        "threshold": 1,
+        "within": 0.0
+      },
+      "actions": [
+        {
+          "type": "run-deployment",
+          "source": "selected",
+          "deployment_id": "__S3_L1_DEPLOYMENT_ID__",
+          "parameters": {
+            "l0_products": {
+              "value": {
+                "template": "{% raw %}{{ event.payload[\"products\"] | tojson }}{% endraw %}",
+                "__prefect_kind": "jinja"
+              },
+              "__prefect_kind": "json"
+            },
+            "source_l0_run_id": {
+              "template": "{% raw %}{{ event.payload.flow_run_id[:8] }}{% endraw %}",
+              "__prefect_kind": "jinja"
+            }
+          },
+          "job_variables": {},
+          "schedule_after": 0.0
+        }
+      ],
+      "actions_on_trigger": [],
+      "actions_on_resolve": [],
+      "owner_resource": null
+    }

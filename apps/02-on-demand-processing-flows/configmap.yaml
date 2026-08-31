@@ -47,7 +47,7 @@ data:
       tags: ["l0", "processing", "s3"]
       entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l0.py:process_s3l0
       work_pool: *my_work_pool
-    - name: Process OLCI S3 L1
+    - name: Process S3 L1 OLCI
       tags: ["l1", "processing", "s3", "olci"]
       entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l1_olci.py:process_s3l1_olci
       work_pool: *my_work_pool
