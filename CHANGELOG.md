@@ -13,6 +13,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a13] - 2026-08-31
+
+### Added
+
+- [RSPY-1118](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/22) : Prefect Automation S3 deployment
+- [RSPY-1000](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/18) : S3 L1 OLCI
+- [PR#23](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/23) : Deploy the aux_staging flow as 'Stage Aux CQL2'
+
+### Changed
+
+- [PR#23](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/21) : Add wrapper in ci
+- Fixed version to v1.0a13
+
 ## [1.0a12] - 2026-07-21
 
 ### Added
