@@ -1,0 +1,42 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prefect-flow-deploy-config-{{ app_name }}
+data:
+  prefect.yaml: |
+    prefect-version: "3"
+
+    pull:
+    - prefect.deployments.steps.git_clone:
+        repository: https://github.com/RS-PYTHON/rs-client-libraries.git
+        # Keep this ref aligned with RS_CLIENT_LIBRARIES_REF in job.yaml.
+        branch: develop
+
+    definitions:
+      work_pools:
+        my_work_pool: &my_work_pool
+          name: {{ prefect3worker.integrated.name }}
+
+    deployments:
+    - name: S3L1 OLCI quicklook
+      tags: ["l1", "s3", "olci", "quicklook"]
+      entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l1_olci_quicklook.py:generate_s3l1_olci_quicklooks
+      work_pool: *my_work_pool
+    - name: S3L2 OLCI quicklook
+      tags: ["l2", "s3", "olci", "quicklook"]
+      entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l2_olci_quicklook.py:generate_s3l2_olci_quicklooks
+      work_pool: *my_work_pool
