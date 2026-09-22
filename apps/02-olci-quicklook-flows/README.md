@@ -7,7 +7,7 @@ Deploy this app first and wait for its Job to complete successfully, then instal
 The automations resolve their target deployment IDs by name; no environment-specific UUID is stored here.
 These apps use the integrated work pool, following the other delivered processing flows.
 
-The quicklook source currently points to `feat-rspy1160/s3-l2-olci-quicklooks`.
+The quicklook source currently points to `develop` in `rs-client-libraries`.
 Before release, replace it with the approved tag in **both** `configmap.yaml` and `job.yaml`.
 The source ref is isolated here so existing processing deployments are not changed.
 

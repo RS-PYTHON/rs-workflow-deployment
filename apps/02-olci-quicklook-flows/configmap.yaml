@@ -24,7 +24,7 @@ data:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
         # Keep this ref aligned with RS_CLIENT_LIBRARIES_REF in job.yaml.
-        branch: feat-rspy1160/s3-l2-olci-quicklooks
+        branch: develop
 
     definitions:
       work_pools:
