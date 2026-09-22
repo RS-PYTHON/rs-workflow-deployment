@@ -1,0 +1,62 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prefect-automation-config-{{ app_name }}
+data:
+  automation.json: |
+    {
+      "name": "S3 L2 OLCI quicklook on quicklook-inputs-ready",
+      "description": "Generate and register quicklooks for published S3 L2 OLCI products.",
+      "enabled": true,
+      "trigger": {
+        "type": "event",
+        "match": {
+          "prefect.resource.id": [
+            "rs-python.s3-l2-result.*"
+          ]
+        },
+        "match_related": {},
+        "after": [],
+        "expect": [
+          "rs-python.s3-l2.quicklook-inputs-ready"
+        ],
+        "for_each": [],
+        "posture": "Reactive",
+        "threshold": 1,
+        "within": 0
+      },
+      "actions": [
+        {
+          "type": "run-deployment",
+          "source": "selected",
+          "deployment_id": "__S3_L2_QUICKLOOK_DEPLOYMENT_ID__",
+          "parameters": {
+            "owner_id": {
+              "__prefect_kind": "jinja",
+              "template": "{% raw %}{{ event.payload.owner_id }}{% endraw %}"
+            },
+            "published_items": {
+              "__prefect_kind": "json",
+              "value": {
+                "__prefect_kind": "jinja",
+                "template": "{% raw %}{{ event.payload.published_items | tojson }}{% endraw %}"
+              }
+            }
+          }
+        }
+      ]
+    }
