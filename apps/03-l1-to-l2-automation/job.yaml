@@ -15,38 +15,43 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: prefect-deployment-job-{{ app_name }}
+  name: prefect-automation-job-{{ app_name }}
 spec:
   template:
     spec:
       containers:
-      - name: prefect-deployment-job
+      - name: prefect-automation-job
         image: prefecthq/prefect:3.7.5-python3.13-kubernetes
         command:
-          - bash
-          - -c
-          - |
-            set -e
-            echo "📦 Cloning the repository..."
-            git clone --single-branch --branch ${RS_CLIENT_LIBRARIES_REF} https://github.com/RS-PYTHON/rs-client-libraries.git
-            cd /opt/prefect/rs-client-libraries
-            echo "📦 Installing dependencies..."
-            ./install.sh
+        - bash
+        - -c
+        - |
+          set -euo pipefail
+          echo "Resolving Prefect deployment IDs..."
 
-            echo "📦 Prefect deployment..."
-            cp /opt/prefect/prefect.yaml .
-            uv run prefect --no-prompt deploy --all --prefect-file ./prefect.yaml
+          cp /opt/prefect/automation.json /tmp/automation.json
+
+          S3_L2_DEPLOYMENT_ID="$(
+            prefect deployment inspect "process-s3-l2-olci/Process S3 L2 OLCI" | grep "'id':" | head -1 | sed -E "s/.*'id': '([^']+)'.*/\1/"
+          )"
+
+          echo "Resolved deployment ID: ${S3_L2_DEPLOYMENT_ID}"
+
+          sed -i "s/__S3_L2_DEPLOYMENT_ID__/${S3_L2_DEPLOYMENT_ID}/g" /tmp/automation.json
+
+          echo "Creating Prefect automation..."
+
+          prefect --no-prompt automation create --from-file /tmp/automation.json
+
         env:
-        - name: RS_CLIENT_LIBRARIES_REF
-          value: develop
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:
-        - name: deployment-script
-          mountPath: /opt/prefect/prefect.yaml
-          subPath: prefect.yaml
+        - name: automation-config
+          mountPath: /opt/prefect/automation.json
+          subPath: automation.json
       volumes:
-      - name: deployment-script
+      - name: automation-config
         configMap:
-          name: prefect-flow-deploy-config-{{ app_name }}
+          name: prefect-automation-config-{{ app_name }}
       restartPolicy: Never
