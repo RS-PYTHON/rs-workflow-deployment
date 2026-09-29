@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a13] - 2026-09-29
+
+### Added
+
+- [RSPY-1160](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/26) : S3L1andL2 quicklooks automation
+- [RSPY-1159](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/25) : RSPY1159: Automation on demand OLCI1 -> OLCI2 - #25
+
+### Fixed
+
+- [PR#27](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/27) : ci: fit wrapper when monitoring is not deployed
+
 ## [1.0a13] - 2026-08-31
 
 ### Added
