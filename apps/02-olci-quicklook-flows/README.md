@@ -1,25 +1,30 @@
-# S3 OLCI quicklooks (RSPY-1145 / RSPY-1160)
+# Sentinel-3 OLCI quicklook flows
 
-Deploy this app first and wait for its Job to complete successfully, then install:
+This application deploys the `S3L1 OLCI quicklook` and `S3L2 OLCI quicklook` flows, in the
+`processing-integrated-k8s-pool` work pool, like the other processing flows. Deploy it first and wait for its job to
+complete successfully, then deploy the automations that trigger them:
+
 - `03-l1-to-quicklook-automation`
 - `03-l2-to-quicklook-automation`
 
-The automations resolve their target deployment IDs by name; no environment-specific UUID is stored here.
-These apps use the integrated work pool, following the other delivered processing flows.
+The automations resolve the identifiers of their target deployments from their names: no identifier specific to a
+platform is stored in this repository. The deployment names are the same as the ones of the quicklook deployments
+created manually: different names for the same flow would create separate deployments.
 
-The quicklook source currently points to `develop` in `rs-client-libraries`.
-Before release, replace it with the approved tag in **both** `configmap.yaml` and `job.yaml`.
-The source ref is isolated here so existing processing deployments are not changed.
+The version of rs-client-libraries deployed by this application is defined separately from the other applications,
+so that the existing processing deployments are not changed. It must be the same in `configmap.yaml` (`branch` of
+the `git_clone` step) and `job.yaml` (`RS_CLIENT_LIBRARIES_REF`): replace `develop` with the released version before
+deploying on an operational platform.
 
 Prerequisites:
-- Existing L1/L2 processing deployments must run code emitting
-  `rs-python.s3-l1.quicklook-inputs-ready` / `rs-python.s3-l2.quicklook-inputs-ready`.
-- Events must contain `owner_id` and `published_items` (each item has `id` and `collection`).
-- The runner image must contain the scientific dependencies, and the catalog must support quicklook asset PATCH.
 
-The automation Jobs follow the repository's `automation create` pattern.
-Do not rerun them blindly: existing manual or previously created automations must be reconciled
-to avoid triggering quicklooks twice. Deployment names match the manual quicklook deployments;
-different names for the same flow would create separate deployments.
+- the deployed Level-1 and Level-2 processing flows emit the `rs-python.s3-l1.quicklook-inputs-ready` and
+  `rs-python.s3-l2.quicklook-inputs-ready` events, see
+  [Systematic processing](https://github.com/RS-PYTHON/rs-client-libraries/blob/develop/docs/doc/advanced/systematic-processing.md#events),
+- the events contain the `owner_id` and the `published_items` (each item with its `id` and `collection`),
+- the image of the flow runs contains the scientific dependencies of the quicklook generation, and the catalog
+  supports the update of the quicklook assets (`PATCH`).
 
-These apps neither install nor modify the L1-to-L2 processing automation.
+The automation jobs create a new automation each time they are run: reconcile them with the automations created
+manually or previously before running them again, to avoid generating the quicklooks twice. These applications don't
+change the `03-l1-to-l2-automation` processing automation.
