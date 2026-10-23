@@ -30,12 +30,12 @@ Each application is a Kubernetes `Job` that runs in the Prefect image, with a `C
 | `01-staging-flow` | `processing-integrated-k8s-pool` | Stage Generic |
 | `02-benchmarking-flows` | `processing-integrated-k8s-pool` | Benchmark Processor |
 | `02-conversion-flows` | `processing-integrated-k8s-pool` | Convert ADF, Convert ADF Group, Convert ADF Scheduled, Convert SAFE |
-| `02-on-demand-processing-flows` | `processing-integrated-k8s-pool` | Process Generic, Process L0, Process S1 L0, Process S1 ARD Reference, Process S1 ARD, Process S3 L0, Process S3 L1 OLCI, Process S3 L2 OLCI |
+| `02-on-demand-processing-flows` | `processing-integrated-k8s-pool` | Process Generic, Process L0, Process S1 L0, Process S1 ARD Reference, Process S1 ARD, Process S3 L0, Process S3 L1 OLCI, Process S3 L1 OLCI Systematic, Process S3 L2 OLCI, Process S3 L2 OLCI Systematic |
 | `02-on-demand-staging-flows` | `processing-integrated-k8s-pool` | Stage Aux CQL2, Stage Aux, Stage Cadip, Stage Prip |
 | `02-olci-quicklook-flows` | `processing-integrated-k8s-pool` | S3L1 OLCI quicklook, S3L2 OLCI quicklook, see [its README](apps/02-olci-quicklook-flows/README.md) |
 | `03-staging-to-l0-automation` | | CADIP staging completed -> S3 L0 |
-| `03-l0-to-l1-automation` | | S3 L0 products ready -> S3 L1 OLCI |
-| `03-l1-to-l2-automation` | | S3 L1 products ready -> S3 L2 OLCI |
+| `03-l0-to-l1-automation` | | S03OLCL0_ generated -> S3 L1 OLCI |
+| `03-l1-to-l2-automation` | | S03OLCEFR generated -> S3 L2 OLCI |
 | `03-l1-to-quicklook-automation` | | S3 L1 OLCI quicklook on quicklook-inputs-ready |
 | `03-l2-to-quicklook-automation` | | S3 L2 OLCI quicklook on quicklook-inputs-ready |
 

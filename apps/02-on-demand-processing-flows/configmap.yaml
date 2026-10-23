@@ -57,9 +57,17 @@ data:
       work_pool: *my_work_pool
     - name: Process S3 L1 OLCI
       tags: ["l1", "processing", "s3", "olci"]
-      entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l1_olci.py:process_s3l1_olci
+      entrypoint: ./rs_workflows/on_demand/sentinel3/process_s3l1olci_ondemand_flow.py:process_s3l1olci_ondemand
+      work_pool: *my_work_pool
+    - name: Process S3 L1 OLCI Systematic
+      tags: ["l1", "processing", "s3", "olci", "systematic"]
+      entrypoint: ./rs_workflows/systematic/process_s3l1olci_systematic_flow.py:process_s3l1olci_systematic
       work_pool: *my_work_pool
     - name: Process S3 L2 OLCI
       tags: ["l2", "processing", "s3", "olci"]
-      entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l2_olci.py:process_s3l2_olci
+      entrypoint: ./rs_workflows/on_demand/sentinel3/process_s3l2olci_ondemand_flow.py:process_s3l2olci_ondemand
+      work_pool: *my_work_pool
+    - name: Process S3 L2 OLCI Systematic
+      tags: ["l2", "processing", "s3", "olci", "systematic"]
+      entrypoint: ./rs_workflows/systematic/process_s3l2olci_systematic_flow.py:process_s3l2olci_systematic
       work_pool: *my_work_pool
