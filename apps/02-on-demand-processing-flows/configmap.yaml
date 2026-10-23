@@ -43,6 +43,14 @@ data:
       tags: ["l0", "processing", "s1"]
       entrypoint: ./rs_workflows/on_demand/sentinel1/s1_l0.py:process_s1l0
       work_pool: *my_work_pool
+    - name: Process S1 ARD Reference
+      tags: ["ard", "processing", "s1"]
+      entrypoint: ./rs_workflows/on_demand/sentinel1/s1_ard.py:process_s1ard_reference
+      work_pool: *my_work_pool
+    - name: Process S1 ARD
+      tags: ["ard", "processing", "s1"]
+      entrypoint: ./rs_workflows/on_demand/sentinel1/s1_ard.py:process_s1ard
+      work_pool: *my_work_pool
     - name: Process S3 L0
       tags: ["l0", "processing", "s3"]
       entrypoint: ./rs_workflows/on_demand/sentinel3/s3_l0.py:process_s3l0
