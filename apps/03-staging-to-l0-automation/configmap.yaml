@@ -19,8 +19,8 @@ metadata:
 data:
   automation.json: |
     {
-      "name": "CADIP staging completed -> S3 L0",
-      "description": "Starts S3 L0 after the CADIP staging deployment completes successfully.",
+      "name": "CADIP staging completed -> L0",
+      "description": "Starts the Level-0 processing of the mission of the session (S1 or S3 L0) after the CADIP staging deployment completes successfully.",
       "enabled": true,
       "tags": [],
       "trigger": {
@@ -48,12 +48,20 @@ data:
         {
           "type": "run-deployment",
           "source": "selected",
-          "deployment_id": "__S3_L0_DEPLOYMENT_ID__",
+          "deployment_id": "__L0_DEPLOYMENT_ID__",
           "parameters": {
             "session": {
               "template": "{% raw %}{{ flow_run.parameters.session_identifier }}{% endraw %}",
               "__prefect_kind": "jinja"
-            }
+            },
+            "env_args": {
+              "value": {
+                "template": "{% raw %}{{ flow_run.parameters.env | tojson }}{% endraw %}",
+                "__prefect_kind": "jinja"
+              },
+              "__prefect_kind": "json"
+            },
+            "force_systematic": true
           },
           "job_variables": {},
           "schedule_after": 0.0

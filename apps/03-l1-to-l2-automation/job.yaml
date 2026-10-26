@@ -32,7 +32,7 @@ spec:
           cp /opt/prefect/automation.json /tmp/automation.json
 
           S3_L2_DEPLOYMENT_ID="$(
-            prefect deployment inspect "process-s3-l2-olci/Process S3 L2 OLCI" | grep "'id':" | head -1 | sed -E "s/.*'id': '([^']+)'.*/\1/"
+            prefect deployment inspect "process-s3-l2-olci-systematic/Process S3 L2 OLCI Systematic" | grep "'id':" | head -1 | sed -E "s/.*'id': '([^']+)'.*/\1/"
           )"
 
           echo "Resolved deployment ID: ${S3_L2_DEPLOYMENT_ID}"
