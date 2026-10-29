@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
-- [RSPY-1069](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/30) : RSPY-1069: Update prefect image to 3.8.7
+- [RSPY-1069](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/30) : Update prefect image to 3.8.7
 - [PR#31](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/31) : RSPY-954: Add the README - #31
 
 
@@ -30,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Added
 
 - [RSPY-1160](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/26) : S3L1andL2 quicklooks automation
-- [RSPY-1159](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/25) : RSPY1159: Automation on demand OLCI1 -> OLCI2 - #25
+- [RSPY-1159](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/25) : Automation on demand OLCI1 -> OLCI2 - #25
 
 ### Fixed
 
