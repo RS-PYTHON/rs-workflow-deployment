@@ -56,11 +56,12 @@ data:
             },
             "env_args": {
               "value": {
-                "template": "{% raw %}{{ dict(flow_run.parameters.env, process=dict(flow_run.parameters.env.process or {}, force_systematic=true)) | tojson }}{% endraw %}",
+                "template": "{% raw %}{{ flow_run.parameters.env | tojson }}{% endraw %}",
                 "__prefect_kind": "jinja"
               },
               "__prefect_kind": "json"
-            }
+            },
+            "force_systematic": true
           },
           "job_variables": {},
           "schedule_after": 0.0
