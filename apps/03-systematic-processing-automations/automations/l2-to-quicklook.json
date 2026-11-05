@@ -1,0 +1,42 @@
+{
+  "name": "S3 L2 OLCI quicklook on quicklook-inputs-ready",
+  "description": "Generate and register quicklooks for published S3 L2 OLCI products.",
+  "enabled": true,
+  "trigger": {
+    "type": "event",
+    "match": {
+      "prefect.resource.id": [
+        "rs-python.s3-l2-result.*"
+      ]
+    },
+    "match_related": {},
+    "after": [],
+    "expect": [
+      "rs-python.s3-l2.quicklook-inputs-ready"
+    ],
+    "for_each": [],
+    "posture": "Reactive",
+    "threshold": 1,
+    "within": 0
+  },
+  "actions": [
+    {
+      "type": "run-deployment",
+      "source": "selected",
+      "deployment_id": "${deployment_id:generate-s3-l2-olci-quicklooks/S3L2 OLCI quicklook}",
+      "parameters": {
+        "owner_id": {
+          "__prefect_kind": "jinja",
+          "template": "{{ event.payload.owner_id }}"
+        },
+        "published_items": {
+          "__prefect_kind": "json",
+          "value": {
+            "__prefect_kind": "jinja",
+            "template": "{{ event.payload.published_items | tojson }}"
+          }
+        }
+      }
+    }
+  ]
+}
