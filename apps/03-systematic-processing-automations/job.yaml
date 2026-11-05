@@ -15,43 +15,33 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: prefect-automation-job-{{ app_name }}
+  name: prefect-automations-job-{{ app_name }}
 spec:
   template:
     spec:
       containers:
-      - name: prefect-automation-job
+      - name: prefect-automations-job
         image: prefecthq/prefect:3.9.1-python3.13-kubernetes
+        # The script and the automation JSON files are in the scripts and automations directories of this
+        # application, see the configMapGenerator of kustomization.yaml
         command:
         - bash
-        - -c
-        - |
-          set -euo pipefail
-          echo "Resolving Prefect deployment IDs..."
-
-          cp /opt/prefect/automation.json /tmp/automation.json
-
-          S3_L2_DEPLOYMENT_ID="$(
-            prefect deployment inspect "process-s3-l2-olci-systematic/Process S3 L2 OLCI Systematic" | grep "'id':" | head -1 | sed -E "s/.*'id': '([^']+)'.*/\1/"
-          )"
-
-          echo "Resolved deployment ID: ${S3_L2_DEPLOYMENT_ID}"
-
-          sed -i "s/__S3_L2_DEPLOYMENT_ID__/${S3_L2_DEPLOYMENT_ID}/g" /tmp/automation.json
-
-          echo "Creating Prefect automation..."
-
-          prefect --no-prompt automation create --from-file /tmp/automation.json
-
+        - /opt/prefect/scripts/create-automations.sh
         env:
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
+        - name: AUTOMATIONS_DIR
+          value: /opt/prefect/automations
         volumeMounts:
-        - name: automation-config
-          mountPath: /opt/prefect/automation.json
-          subPath: automation.json
+        - name: automations
+          mountPath: /opt/prefect/automations
+        - name: scripts
+          mountPath: /opt/prefect/scripts
       volumes:
-      - name: automation-config
+      - name: automations
         configMap:
-          name: prefect-automation-config-{{ app_name }}
+          name: prefect-automations-config-{{ app_name }}
+      - name: scripts
+        configMap:
+          name: prefect-automations-scripts-{{ app_name }}
       restartPolicy: Never
