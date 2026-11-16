@@ -13,12 +13,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a15] - 2026-10-22
+
+### Added
+
+- [RSPY-1069](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/30) : Update prefect image to 3.8.7
+- [PR#31](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/31) : RSPY-954: Add the README - #31
+- [PR#34](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/34) : RSPY-1025: Deploy the S1 ARD flows
+- [PR#35](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/35) : RSPY-1234: Deploy the systematic processing of the Level-0 and Sentinel-3 OLCI products
+
+
+### Fixed
+
+- [PR#32](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/32) : RSPY-1229: Download and cache the Trivy databases once per day
+
 ## [1.0a14] - 2026-09-29
 
 ### Added
 
 - [RSPY-1160](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/26) : S3L1andL2 quicklooks automation
-- [RSPY-1159](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/25) : RSPY1159: Automation on demand OLCI1 -> OLCI2 - #25
+- [RSPY-1159](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/25) : Automation on demand OLCI1 -> OLCI2 - #25
 
 ### Fixed
 

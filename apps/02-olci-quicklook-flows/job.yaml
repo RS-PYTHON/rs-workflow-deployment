@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: prefect-deployment-job
-        image: prefecthq/prefect:3.8.7-python3.13-kubernetes
+        image: prefecthq/prefect:3.9.1-python3.13-kubernetes
         command:
           - bash
           - -c
@@ -38,7 +38,7 @@ spec:
             uv run prefect --no-prompt deploy --all --prefect-file ./prefect.yaml
         env:
         - name: RS_CLIENT_LIBRARIES_REF
-          value: develop
+          value: v1.0a15
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:

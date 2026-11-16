@@ -1,0 +1,53 @@
+{
+  "name": "CADIP staging completed -> L0",
+  "description": "Starts the Level-0 processing of the mission of the session (S1 or S3 L0) after the CADIP staging deployment completes successfully.",
+  "enabled": true,
+  "tags": [],
+  "trigger": {
+    "type": "event",
+    "match": {
+      "prefect.resource.id": [
+        "prefect.flow-run.*"
+      ]
+    },
+    "match_related": {
+      "prefect.resource.id": [
+        "prefect.deployment.${deployment_id:stage-cadip-with-options/Stage Cadip}"
+      ]
+    },
+    "after": [],
+    "expect": [
+      "prefect.flow-run.Completed"
+    ],
+    "for_each": [],
+    "posture": "Reactive",
+    "threshold": 1,
+    "within": 0.0
+  },
+  "actions": [
+    {
+      "type": "run-deployment",
+      "source": "selected",
+      "deployment_id": "${deployment_id:process-l0/Process L0}",
+      "parameters": {
+        "session": {
+          "template": "{{ flow_run.parameters.session_identifier }}",
+          "__prefect_kind": "jinja"
+        },
+        "env_args": {
+          "value": {
+            "template": "{{ flow_run.parameters.env | tojson }}",
+            "__prefect_kind": "jinja"
+          },
+          "__prefect_kind": "json"
+        },
+        "force_systematic": true
+      },
+      "job_variables": {},
+      "schedule_after": 0.0
+    }
+  ],
+  "actions_on_trigger": [],
+  "actions_on_resolve": [],
+  "owner_resource": null
+}

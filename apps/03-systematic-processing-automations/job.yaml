@@ -1,0 +1,47 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prefect-automations-job-{{ app_name }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: prefect-automations-job
+        image: prefecthq/prefect:3.9.1-python3.13-kubernetes
+        # The script and the automation JSON files are in the scripts and automations directories of this
+        # application, see the configMapGenerator of kustomization.yaml
+        command:
+        - bash
+        - /opt/prefect/scripts/create-automations.sh
+        env:
+        - name: PREFECT_API_URL
+          value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
+        - name: AUTOMATIONS_DIR
+          value: /opt/prefect/automations
+        volumeMounts:
+        - name: automations
+          mountPath: /opt/prefect/automations
+        - name: scripts
+          mountPath: /opt/prefect/scripts
+      volumes:
+      - name: automations
+        configMap:
+          name: prefect-automations-config-{{ app_name }}
+      - name: scripts
+        configMap:
+          name: prefect-automations-scripts-{{ app_name }}
+      restartPolicy: Never

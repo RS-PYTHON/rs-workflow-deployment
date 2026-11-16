@@ -22,5 +22,21 @@ labels:
 namespace: processing
 
 resources:
-  - configmap.yaml
   - job.yaml
+
+# The files of the subdirectories are copied as is by the Ansible playbook (no Jinja templating)
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  # One Prefect automation per JSON file: kustomize doesn't support globs, list each file of the automations directory
+  - name: prefect-automations-config-{{ app_name }}
+    files:
+      - automations/staging-to-l0.json
+      - automations/l0-to-l1.json
+      - automations/l1-to-l2.json
+      - automations/l1-to-quicklook.json
+      - automations/l2-to-quicklook.json
+  - name: prefect-automations-scripts-{{ app_name }}
+    files:
+      - scripts/create-automations.sh

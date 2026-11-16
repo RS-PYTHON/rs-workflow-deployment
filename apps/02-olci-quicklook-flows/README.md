@@ -2,10 +2,9 @@
 
 This application deploys the `S3L1 OLCI quicklook` and `S3L2 OLCI quicklook` flows, in the
 `processing-integrated-k8s-pool` work pool, like the other processing flows. Deploy it first and wait for its job to
-complete successfully, then deploy the automations that trigger them:
-
-- `03-l1-to-quicklook-automation`
-- `03-l2-to-quicklook-automation`
+complete successfully, then deploy the `03-systematic-processing-automations` application, that creates the
+automations that trigger them (`S3 L1 OLCI quicklook on quicklook-inputs-ready` and
+`S3 L2 OLCI quicklook on quicklook-inputs-ready`).
 
 The automations resolve the identifiers of their target deployments from their names: no identifier specific to a
 platform is stored in this repository. The deployment names are the same as the ones of the quicklook deployments
@@ -25,6 +24,5 @@ Prerequisites:
 - the image of the flow runs contains the scientific dependencies of the quicklook generation, and the catalog
   supports the update of the quicklook assets (`PATCH`).
 
-The automation jobs create a new automation each time they are run: reconcile them with the automations created
-manually or previously before running them again, to avoid generating the quicklooks twice. These applications don't
-change the `03-l1-to-l2-automation` processing automation.
+The automation job creates new automations each time it is run: reconcile them with the automations created
+manually or previously before running it again, to avoid generating the quicklooks twice.
