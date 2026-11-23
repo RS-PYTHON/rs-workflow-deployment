@@ -13,6 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a16] - 2026-11-23
+
+### Added
+
+- [RSPY-1188](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/36⁠) : Support CPM "Fast_zarr" and obstore - #
+- [RSPY-1264](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/38⁠) : Deploy all the systematic processing automations in a single application
+- [RSPY-1262](https://github.com/RS-PYTHON/rs-workflow-deployment/pull/37) : Update prefect from 3.8.7 to 3.9.1
+
 ## [1.0a15] - 2026-10-22
 
 ### Added
