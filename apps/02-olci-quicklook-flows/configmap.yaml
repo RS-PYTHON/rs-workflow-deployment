@@ -23,7 +23,7 @@ data:
     pull:
     - prefect.deployments.steps.git_clone:
         repository: https://github.com/RS-PYTHON/rs-client-libraries.git
-        # Keep this ref aligned with RS_CLIENT_LIBRARIES_REF in job.yaml.
+        # Keep this ref aligned with the image tag in job.yaml.
         branch: v1.0a16
 
     definitions:

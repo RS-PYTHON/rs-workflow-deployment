@@ -13,13 +13,16 @@ by the `apps.yaml` playbook of [rs-infra-core](https://github.com/RS-PYTHON/rs-i
 [rs-workflow-env](https://github.com/RS-PYTHON/rs-workflow-env) (Prefect server and workers) and
 [rs-server-deployment](https://github.com/RS-PYTHON/rs-server-deployment) (services).
 
-Each application is a Kubernetes `Job` that runs in the Prefect image, with a `ConfigMap`:
+Each application is a Kubernetes `Job` with a `ConfigMap`:
 
-- the **deployment** applications (`01-*` and `02-*`) clone rs-client-libraries at a given version
-  (`RS_CLIENT_LIBRARIES_REF`) and run `prefect deploy` with a
-  [prefect.yaml](https://docs.prefect.io/v3/how-to-guides/deployments/prefect-yaml) file, that lists the
-  deployments, their entry points and their work pool. When a flow runs, the worker clones the same version of
-  rs-client-libraries (`git_clone` pull step).
+- the **deployment** applications (`01-*` and `02-*`) run in the rs-client-libraries image of the flow runs
+  (`ghcr.io/rs-python/prefect/rs-client-libraries/k8s`), tagged with a given version of rs-client-libraries, that
+  already contains the `rs_workflows` package and its dependencies. They import the flows and run `prefect deploy`
+  with a [prefect.yaml](https://docs.prefect.io/v3/how-to-guides/deployments/prefect-yaml) file, that lists the
+  deployments, their entry points and their work pool: a job only takes a few seconds, and it fails if a flow cannot
+  be imported. This is done by the [`scripts/deploy_flows.py`](scripts/deploy_flows.py) script, shared by all these
+  applications: their `job.yaml` includes it at deployment time from their `deploy_flows.py` symbolic link. When a
+  flow runs, the worker clones the same version of rs-client-libraries (`git_clone` pull step).
 - the **automation** application (`03-systematic-processing-automations`) resolves the identifiers of the target
   deployments from their names and creates all the
   [Prefect automations](https://docs.prefect.io/v3/concepts/automations) of the systematic processing, in a single
@@ -61,7 +64,7 @@ The automation job creates new automations each time it is run: delete the exist
 interface before running it again, otherwise the flows are triggered twice.
 
 To deploy a new version of the flows, change the version of rs-client-libraries in the `configmap.yaml` (`branch` of
-the `git_clone` step) and `job.yaml` (`RS_CLIENT_LIBRARIES_REF`) files of the applications, then run the playbook
+the `git_clone` step) and `job.yaml` (tag of the image) files of the applications, then run the playbook
 again. To add your own flows, see
 [Write a custom flow](https://github.com/RS-PYTHON/rs-client-libraries/blob/develop/docs/doc/advanced/custom-flow.md).
 

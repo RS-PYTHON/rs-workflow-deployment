@@ -1,0 +1,10 @@
+# virtualenv, venv, pipenv, poetry, etc.
+.venv/
+env/
+venv/
+env.sh
+
+# temporary files
+__pycache__/
+*.pyc
+.vscode/
