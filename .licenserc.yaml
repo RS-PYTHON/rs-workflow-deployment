@@ -23,6 +23,7 @@ header:
     - '**/*.csv'
     - '**/*.env'
     - '**/*.json'
+    - '**/*.lock'
     - '**/*.md'
     - '**/*.template'
     - '**/*.tfvars'

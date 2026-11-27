@@ -21,24 +21,18 @@ spec:
     spec:
       containers:
       - name: prefect-deployment-job
-        image: prefecthq/prefect:3.9.1-python3.13-kubernetes
+        # Image of the flow runs, tagged with the rs-client-libraries version that the deployments pull (see
+        # deploy_flows.py)
+        image: ghcr.io/rs-python/prefect/rs-client-libraries/k8s:v1.0a16
         command:
-          - bash
+          - python
           - -c
+          # Script shared by all the flow deployment jobs, included at deployment time. NOTE: keep the empty line
+          # after the include, that Ansible removes (trim_blocks): the next line would be appended to the script.
           - |
-            set -e
-            echo "📦 Cloning the repository..."
-            git clone --single-branch --branch ${RS_CLIENT_LIBRARIES_REF} https://github.com/RS-PYTHON/rs-client-libraries.git
-            cd /opt/prefect/rs-client-libraries
-            echo "📦 Installing dependencies..."
-            ./install.sh
+            {% filter indent(12) %}{% include 'deploy_flows.py' %}{% endfilter %}
 
-            echo "📦 Prefect deployment..."
-            cp /opt/prefect/prefect.yaml .
-            uv run prefect --no-prompt deploy --all --prefect-file ./prefect.yaml
         env:
-        - name: RS_CLIENT_LIBRARIES_REF
-          value: v1.0a16
         - name: PREFECT_API_URL
           value: "http://prefect-copernicus-server.processing.svc.cluster.local:4200/api"
         volumeMounts:

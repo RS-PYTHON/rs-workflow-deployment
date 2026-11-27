@@ -12,7 +12,7 @@ created manually: different names for the same flow would create separate deploy
 
 The version of rs-client-libraries deployed by this application is defined separately from the other applications,
 so that the existing processing deployments are not changed. It must be the same in `configmap.yaml` (`branch` of
-the `git_clone` step) and `job.yaml` (`RS_CLIENT_LIBRARIES_REF`): replace `develop` with the released version before
+the `git_clone` step) and `job.yaml` (tag of the image): replace `develop` with the released version before
 deploying on an operational platform.
 
 Prerequisites:
